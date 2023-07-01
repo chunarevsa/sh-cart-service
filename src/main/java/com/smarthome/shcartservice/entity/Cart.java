@@ -1,7 +1,9 @@
 package com.smarthome.shcartservice.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +17,7 @@ public class Cart {
 
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id")
-    private Set<ItemUnit> items = new HashSet<>();
+    private List<ItemUnit> items = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -33,11 +35,11 @@ public class Cart {
         this.userId = userId;
     }
 
-    public Set<ItemUnit> getItems() {
+    public List<ItemUnit> getItems() {
         return items;
     }
 
-    public void setItems(Set<ItemUnit> items) {
+    public void setItems(List<ItemUnit> items) {
         this.items = items;
     }
 }

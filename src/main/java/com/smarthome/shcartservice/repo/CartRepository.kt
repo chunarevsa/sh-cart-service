@@ -8,4 +8,5 @@ import java.util.*
 @Repository
 interface CartRepository : JpaRepository<Cart, Long> {
     fun findCartByUserId(userId: Long): Optional<Cart>
+    fun deleteByUserId(userId: Long)
 }

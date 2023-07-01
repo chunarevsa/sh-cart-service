@@ -2,6 +2,7 @@ package com.smarthome.shcartservice.service
 
 import com.smarthome.shcartservice.dto.CreateCartRequest
 import com.smarthome.shcartservice.entity.Cart
+import com.smarthome.shcartservice.entity.ItemUnit
 import com.smarthome.shcartservice.repo.CartRepository
 import com.smarthome.shuserservice.exception.NotFoundException
 import org.springframework.stereotype.Service
@@ -14,9 +15,19 @@ class CartService(
 
     fun getCartByUserId(userId: Long): Optional<Cart> = cartRepository.findCartByUserId(userId)
 
-    fun createOrUpdateCart(req: CreateCartRequest): Cart {
-        val cart = getCartByUserId(req.userId).map {
-            it
+    fun createOrUpdateCart(req: CreateCartRequest): Cart =
+        cartRepository.save(getCartByUserId(req.userId).map { oldCart ->
+            req.itemsUnit.forEach { requestItem ->
+                val oldItem = oldCart.items.find { it.sku == requestItem.sku }
+                if (oldItem != null) {
+                    oldItem.amount.plus(requestItem.amount)
+                } else oldCart.items.add(ItemUnit().apply {
+                    this.amount = requestItem.amount
+                    this.sku = requestItem.sku
+                    this.cart = oldCart
+                })
+            }
+            return@map cartRepository.save(oldCart)
         }.orElseGet {
             return@orElseGet cartRepository.save(
                 Cart().apply {
@@ -24,33 +35,16 @@ class CartService(
                     this.items = req.itemsUnit
                 }
             )
+        })
+
+    fun deleteCartByUserId(userId: Long) {
+        val cart = findCartByUserId(userId)
+        cartRepository.deleteByUserId(cart.userId)
+    }
+
+    private fun findCartByUserId(userId: Long): Cart {
+        return cartRepository.findCartByUserId(userId).map { it }.orElseThrow {
+            NotFoundException("cart", userId.toString())
         }
-
     }
-    cart.addRole(roleService.getRoleByRoleName(ERoleName.ROLE_USER))
-    return cartRepository.save(cart)
-}
-
-fun updateCart(cartId: Long, req: UpdateCartRequest): Cart {
-    val cart = findCart(cartId)
-    req.firstName.let { cart.profile.firstName = it }
-    req.lastName.let { cart.profile.lastName = it }
-    req.password.let { cart.password = it }
-
-    return cartRepository.save(cart)
-}
-
-fun deactivateCart(cartId: Long) {
-    val cart = findCart(cartId)
-    cart.isActive = false
-    // TODO: add deactivating items and order, delete cart
-
-    cartRepository.save(cart)
-}
-
-private fun findCart(userId: Long): Cart {
-    return cartRepository.findCartByUserId(userId).map { it }.orElseThrow {
-        NotFoundException("cart", userId.toString())
-    }
-}
 }
