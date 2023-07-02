@@ -51,4 +51,14 @@ public class ItemUnit {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+    @Override
+    public String toString() {
+        return "ItemUnit{" +
+                "id=" + id +
+                ", sku='" + sku + '\'' +
+                ", amount=" + amount +
+                ", cart=" + cart +
+                '}';
+    }
 }
