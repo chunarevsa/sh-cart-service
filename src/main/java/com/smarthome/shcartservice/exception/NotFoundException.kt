@@ -1,4 +1,4 @@
-package com.smarthome.shuserservice.exception
+package com.smarthome.shcartservice.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

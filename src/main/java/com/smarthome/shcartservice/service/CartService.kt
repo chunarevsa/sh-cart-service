@@ -2,9 +2,9 @@ package com.smarthome.shcartservice.service
 
 import com.smarthome.shcartservice.dto.CreateCartRequest
 import com.smarthome.shcartservice.entity.Cart
-import com.smarthome.shcartservice.repo.CartRepository
 import com.smarthome.shcartservice.entity.ItemUnit
-import com.smarthome.shuserservice.exception.NotFoundException
+import com.smarthome.shcartservice.repo.CartRepository
+import com.smarthome.shcartservice.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -28,7 +28,8 @@ class CartService(
                 })
             }
             return@map cartRepository.save(oldCart)
-        }.orElseGet {
+        }.orElseGet
+        {
             return@orElseGet cartRepository.save(
                 Cart().apply {
                     this.userId = req.userId
@@ -37,8 +38,10 @@ class CartService(
             )
         })
 
+
     fun deleteCartByUserId(userId: Long) {
         val cart = findCartByUserId(userId)
+        // TODO: delete cart in User (user-service)
         cartRepository.deleteCartByUserId(cart.userId)
     }
 

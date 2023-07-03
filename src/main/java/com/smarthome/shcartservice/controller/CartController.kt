@@ -5,6 +5,8 @@ import com.smarthome.shcartservice.entity.Cart
 import com.smarthome.shcartservice.service.CartService
 import com.smarthome.shcartservice.util.HeaderUtil
 import com.smarthome.shcartservice.util.ResponseUtil
+import com.smarthome.shcartservice.util.webclient.UserWebClientBuilder
+import com.smarthome.shcartservice.exception.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -16,6 +18,7 @@ import java.net.URI
 @RequestMapping("/api/v1/cart")
 class CartController(
     private val cartService: CartService,
+    private val userWebClientBuilder: UserWebClientBuilder,
     @Value("\${spring.application.name}")
     private val applicationName: String
 ) {
@@ -33,6 +36,7 @@ class CartController(
     @PostMapping("/create")
     fun createOrUpdateCart(@RequestBody req: CreateCartRequest): ResponseEntity<Cart> {
         log.debug("REST request to create or update $ENTITY_NAME : {}", req)
+        if (!userWebClientBuilder.userExists(req.userId)) throw NotFoundException(ENTITY_NAME, "userId")
         val cart = cartService.createOrUpdateCart(req)
         return ResponseEntity.created(URI("/api/cart/${cart.id}"))
             .headers(
