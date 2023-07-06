@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-public class ItemUnit {
+public class CartItemUnit {
     @Id
-    @Column(name = "item_unit_id")
+    @Column(name = "cart_item_unit_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -19,6 +19,14 @@ public class ItemUnit {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "cart_id", insertable = false, updatable = false)
     private Cart cart;
+
+    public CartItemUnit() {
+    }
+
+    public CartItemUnit(String sku, Long amount) {
+        this.sku = sku;
+        this.amount = amount;
+    }
 
     public Long getId() {
         return id;

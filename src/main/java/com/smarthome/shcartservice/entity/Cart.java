@@ -15,7 +15,7 @@ public class Cart {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id")
-    private List<ItemUnit> items = new ArrayList<>();
+    private List<CartItemUnit> items = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Cart {
         this.userId = userId;
     }
 
-    public List<ItemUnit> getItems() {
+    public List<CartItemUnit> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemUnit> items) {
+    public void setItems(List<CartItemUnit> items) {
         this.items = items;
     }
 
