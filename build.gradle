@@ -18,6 +18,10 @@ ext {
 }
 
 dependencies {
+	// Kotlin
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+	// Spring Boot
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -25,11 +29,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// Kotlin
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	// Spring Cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-feign:1.4.7.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit:4.0.1'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.2.10.RELEASE'
 
 	// DB
 	implementation 'org.postgresql:postgresql:42.5.4'
